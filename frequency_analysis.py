@@ -102,3 +102,35 @@ def slide_histogram(histo: dict, step: int) -> dict:
         result[char] = histo[letters[(index - step) % n]]
 
     return result
+
+def histogram_from_file(filepath: str, lang: Language) -> dict:
+    try:
+        if filepath:
+            with open(filepath, 'r') as file:
+                return normalized_histogram(file.read(), lang)
+    except:
+        pass
+
+    return empty_histogram(lang)
+
+def find_step_for_best_match(target_histogram: dict, sliding_histogram: dict) -> int:
+    """
+    Returns how many times should sliding_histogram shift to the right (closed)
+    so it is as similar as possible to target_histogram.
+    :param target_histogram: Histogram used as reference
+    :param sliding_histogram: Histogram which slides
+    :return: The number of closed right shifts sliding histogram which maximises their similarity.
+    It is a number in [0, len(target_histogram) - 1]
+    """
+    best_similarity = similarity(target_histogram, sliding_histogram)
+    step_for_best_fit = 0
+
+    for step in range(1, len(target_histogram)):
+        shifted_histogram = slide_histogram(sliding_histogram, step)
+        candidate_similarity = similarity(shifted_histogram, target_histogram)
+
+        if candidate_similarity > best_similarity:
+            best_similarity = candidate_similarity
+            step_for_best_fit = step
+
+    return step_for_best_fit
