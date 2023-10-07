@@ -52,7 +52,7 @@ class CaesarApp(tk.Tk):
 
         self.columnconfigure(0, weight=5)
         self.columnconfigure(1, weight=1)
-        self.columnconfigure(1, weight=5)
+        self.columnconfigure(2, weight=5) # For some reason, if I use weight=5 it isn't as wide as column 1
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=3)
         self.rowconfigure(2, weight=17)
@@ -62,7 +62,7 @@ class CaesarApp(tk.Tk):
         lang_frame = tk.Frame(self)
         lang_frame.grid(row=0, column=2)
         lang_label = tk.Label(lang_frame, text="Clear text language: ")
-        lang_label.grid(row=0, column=0)
+        lang_label.pack(side='left')
 
         # Variable to hold the selected value
         lang_var = tk.StringVar(value=Language.to_string(self.selected_language))
@@ -71,12 +71,12 @@ class CaesarApp(tk.Tk):
         es_radio = tk.Radiobutton(lang_frame, text=Language.to_string(Language.ESP), variable=lang_var,
                                   value=Language.to_string(Language.ESP),
                                   command=lambda: self.on_select_language(lang_var.get()))
-        es_radio.grid(row=0, column=1)
+        es_radio.pack(side='left')
 
         en_radio = tk.Radiobutton(lang_frame, text=Language.to_string(Language.ENG), variable=lang_var,
                                   value=Language.to_string(Language.ENG),
                                   command=lambda: self.on_select_language(lang_var.get()))
-        en_radio.grid(row=0, column=2, padx=(0, 10))
+        en_radio.pack(side='left')
 
         # Add separator
         separator = ttk.Separator(self, orient='horizontal')
@@ -102,14 +102,72 @@ class CaesarApp(tk.Tk):
                           row1=self.alphabet(),
                           row2=self.alphabet())
 
-        # Add text widgets
-        text_input_frame = tk.Frame(self, bg='red')
-        text_input_frame.grid(row=2, column=0, sticky='nswe')
-        text_input_frame.rowconfigure(0, weight=4)
-        text_input_frame.rowconfigure(1, weight=1)
-        
-        clear_text_scroll_bar = tk.Scrollbar(text_input_frame)
-        cipher_text_scroll_bar = tk.Scrollbar(text_input_frame)
+        clear_text_frame = tk.Frame(self)
+        clear_text_frame.grid(row=2, column=0, sticky='nsew')
+        clear_text_frame.grid_rowconfigure(0, weight=5)
+        clear_text_frame.grid_rowconfigure(1, weight=85)
+        clear_text_frame.grid_rowconfigure(2, weight=10)
+        clear_text_frame.grid_columnconfigure(0, weight=90)  # Take as much space as possible
+        clear_text_frame.grid_columnconfigure(1, weight=1)
+
+        # Create a Text widget with a Scrollbar
+        clear_text_label = tk.Label(clear_text_frame, text='Clear text')
+        clear_text_label.grid(row=0, column=0, columnspan=2)
+        clear_text = tk.Text(clear_text_frame, wrap=tk.WORD)
+        clear_text.grid(row=1, column=0, padx=(20, 0), sticky="nsew")
+
+        clear_scrollbar = tk.Scrollbar(clear_text_frame, command=clear_text.yview)
+        clear_scrollbar.grid(row=1, column=1, sticky="ns")
+        clear_text.config(yscrollcommand=clear_scrollbar.set)
+
+        # Create a 'Save' button and place it to the left of the second row
+        clear_save_button = tk.Button(clear_text_frame, text="Save to file")
+        clear_save_button.grid(row=2, column=0, columnspan=2, sticky="w")
+
+        translation_frame = tk.Frame(self)
+        translation_frame.grid(row=2, column=1, sticky='nswe')
+
+        # Buttons
+        encrypt_button = tk.Button(translation_frame, text=">")
+        encrypt_button.grid(row=1, column=1)
+
+        decrypt_button = tk.Button(translation_frame, text="<")
+        decrypt_button.grid(row=2, column=1)
+
+        # Configure translation_frame rows and columns for centering
+        translation_frame.grid_rowconfigure(0, weight=1)  # Top padding
+        translation_frame.grid_rowconfigure(1, weight=0)  # Buttons (no extra space)
+        translation_frame.grid_rowconfigure(2, weight=0)  # Buttons (no extra space)
+        translation_frame.grid_rowconfigure(3, weight=1)  # Bottom padding
+
+        translation_frame.grid_columnconfigure(0, weight=1)  # Left padding
+        translation_frame.grid_columnconfigure(1, weight=0)  # Buttons (no extra space)
+        translation_frame.grid_columnconfigure(2, weight=1)  # Right padding
+
+        cipher_text_frame = tk.Frame(self)
+        cipher_text_frame.grid(row=2, column=2, sticky='nswe')
+
+        cipher_text_frame = tk.Frame(self)
+        cipher_text_frame.grid(row=2, column=2, sticky='nsew')
+        cipher_text_frame.grid_rowconfigure(0, weight=5)
+        cipher_text_frame.grid_rowconfigure(1, weight=85)
+        cipher_text_frame.grid_rowconfigure(2, weight=10)
+        cipher_text_frame.grid_columnconfigure(0, weight=90)  # Take as much space as possible
+        cipher_text_frame.grid_columnconfigure(1, weight=1)
+
+        # Create a Text widget with a Scrollbar
+        cipher_text_label = tk.Label(cipher_text_frame, text='Encrypted text')
+        cipher_text_label.grid(row=0, column=0, columnspan=2)
+        cipher_text = tk.Text(cipher_text_frame, wrap=tk.WORD)
+        cipher_text.grid(row=1, column=0, sticky="nsew")
+
+        cipher_scrollbar = tk.Scrollbar(cipher_text_frame, command=cipher_text.yview)
+        cipher_scrollbar.grid(row=1, column=1, padx=(0, 20), sticky="ns")
+        cipher_text.config(yscrollcommand=cipher_scrollbar.set)
+
+        # Create a 'Save' button and place it to the left of the second row
+        cipher_save_button = tk.Button(cipher_text_frame, text="Save to file")
+        cipher_save_button.grid(row=2, column=0, columnspan=2, sticky="w")
 
 
 if __name__ == "__main__":
