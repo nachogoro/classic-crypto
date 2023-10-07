@@ -21,6 +21,9 @@ class CaesarApp(tk.Tk):
     def on_select_language(self, value):
         pass
 
+    def on_enter_key_pressed(self, event):
+        pass
+
     def create_table(self, parent, row1: list, row2: list):
         for r in range(2):
             for c in range(len(row1)):
@@ -38,6 +41,7 @@ class CaesarApp(tk.Tk):
         super().__init__()
 
         self.selected_language = Language.ESP
+        self.cipher_key = 0
 
         # UI components
         self.clear_text_widget = None
@@ -46,27 +50,19 @@ class CaesarApp(tk.Tk):
         self.title("Caesar cypher")
         self.geometry('800x800')
 
-        self.columnconfigure(0, weight=1)
+        self.columnconfigure(0, weight=5)
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(1, weight=5)
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=3)
         self.rowconfigure(2, weight=17)
 
         ########################
-        # Place the settings row
-        settings_frame = tk.Frame(self)
-        settings_frame.columnconfigure(0, weight=1)
-        settings_frame.columnconfigure(1, weight=10)
-        settings_frame.grid(row=0, column=0, pady=20, padx=20, sticky='nswe')
-        key_frame = tk.Frame(settings_frame)
-        key_frame.grid(row=0, column=0)
-        key_label = tk.Label(key_frame, text="Key:")
-        key_label.grid(row=0, column=0)
-        key_entry = tk.Entry(key_frame, width=3)
-        key_entry.grid(row=0, column=1, padx=5, sticky='w')
-
-        lang_frame = tk.Frame(settings_frame)
-        lang_frame.grid(row=0, column=1, sticky='e')
+        # Place the language selection buttons
+        lang_frame = tk.Frame(self)
+        lang_frame.grid(row=0, column=2)
         lang_label = tk.Label(lang_frame, text="Clear text language: ")
+        lang_label.grid(row=0, column=0)
 
         # Variable to hold the selected value
         lang_var = tk.StringVar(value=Language.to_string(self.selected_language))
@@ -75,22 +71,33 @@ class CaesarApp(tk.Tk):
         es_radio = tk.Radiobutton(lang_frame, text=Language.to_string(Language.ESP), variable=lang_var,
                                   value=Language.to_string(Language.ESP),
                                   command=lambda: self.on_select_language(lang_var.get()))
+        es_radio.grid(row=0, column=1)
 
         en_radio = tk.Radiobutton(lang_frame, text=Language.to_string(Language.ENG), variable=lang_var,
                                   value=Language.to_string(Language.ENG),
                                   command=lambda: self.on_select_language(lang_var.get()))
-
-        en_radio.pack(side='right')
-        es_radio.pack(side='right')
-        lang_label.pack(side='right')
+        en_radio.grid(row=0, column=2, padx=(0, 10))
 
         # Add separator
         separator = ttk.Separator(self, orient='horizontal')
-        separator.grid(row=0, column=0, sticky="swe", padx=10, pady=5)
+        separator.grid(row=0, column=0, columnspan=3, sticky="swe", padx=10)
+
+        ########################
+        # Add key entry file
+        key_frame = tk.Frame(self)
+        key_frame.grid(row=0, column=0)
+        guide_label = tk.Label(key_frame, text="Caesar key:")
+        guide_label.pack(padx=5, side='left')
+
+        # Use a StringVar to track and display the selected key
+        self.cipher_key = tk.StringVar()
+        cipher_entry = tk.Entry(key_frame, textvariable=self.cipher_key, width=3)
+        cipher_entry.pack(padx=5, side='left')
+        cipher_entry.bind('<Return>', self.on_enter_key_pressed)
 
         # Add table
         table_frame = tk.Frame(self)
-        table_frame.grid(row=1, column=0, padx=10, pady=10)
+        table_frame.grid(row=1, column=0, columnspan=3, padx=10, pady=10)
         self.create_table(table_frame,
                           row1=self.alphabet(),
                           row2=self.alphabet())
