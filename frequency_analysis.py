@@ -1,38 +1,10 @@
-from enum import Enum
+import alphabet_utils
+from alphabet_utils import Language
 
-
-class Language(Enum):
-    ESP = 1
-    ENG = 2
-
-    @staticmethod
-    def from_string(s: str) -> "Language":
-        mapping = {
-            "ESP": Language.ESP,
-            "ENG": Language.ENG,
-        }
-        return mapping.get(s.upper())
-
-    @staticmethod
-    def to_string(lang: "Language") -> str:
-        mapping = {
-            Language.ESP: "ESP",
-            Language.ENG: "ENG",
-        }
-        return mapping.get(lang)
-
-
-def alphabet_for_language(lang: Language) -> list:
-    if lang == Language.ENG:
-        return 'abcdefghijklmnopqrstuvwxyz'
-    elif lang == Language.ESP:
-        return 'abcdefghijklmnñopqrstuvwxyz'
-    else:
-        raise ValueError(f"Unsupported language: {lang}")
 
 def normalized_histogram(s: str, lang: Language) -> dict:
     # Define the alphabet for each language
-    alphabet = alphabet_for_language(lang)
+    alphabet = alphabet_utils.lowercase_alphabet(lang)
 
     # Initialize the dictionary with all letters set to 0
     freq = {letter: 0 for letter in alphabet}
@@ -62,7 +34,6 @@ def frequency_per_language(lang: Language) -> dict:
         for key in frequency_per_language.esp_histogram:
             frequency_per_language.esp_histogram[key] /= 100
 
-
     if not hasattr(frequency_per_language, "eng_histogram"):
         frequency_per_language.eng_histogram = {
             'a': 8.2, 'b': 1.5, 'c': 2.8, 'd': 4.3, 'e': 12.7, 'f': 2.2, 'g': 2.0, 'h': 6.1, 'i': 7.0, 'j': 0.15,
@@ -80,7 +51,7 @@ def frequency_per_language(lang: Language) -> dict:
 
 def empty_histogram(lang: Language) -> dict:
     result = dict()
-    alphabet = alphabet_for_language(lang)
+    alphabet = alphabet_utils.lowercase_alphabet(lang)
     for char in alphabet:
         result[char] = 0
     return result
@@ -89,8 +60,9 @@ def empty_histogram(lang: Language) -> dict:
 def similarity(histo1: dict, histo2: dict) -> float:
     difference = 0
     for key in histo1.keys():
-        difference += abs(histo1[key] - histo2[key])**2
+        difference += abs(histo1[key] - histo2[key]) ** 2
     return 1 - difference
+
 
 def slide_histogram(histo: dict, step: int) -> dict:
     result = dict()
@@ -103,6 +75,7 @@ def slide_histogram(histo: dict, step: int) -> dict:
 
     return result
 
+
 def histogram_from_file(filepath: str, lang: Language) -> dict:
     try:
         if filepath:
@@ -112,6 +85,7 @@ def histogram_from_file(filepath: str, lang: Language) -> dict:
         pass
 
     return empty_histogram(lang)
+
 
 def find_step_for_best_match(target_histogram: dict, sliding_histogram: dict) -> int:
     """

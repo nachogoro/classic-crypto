@@ -1,41 +1,28 @@
 import tkinter as tk
-from tkinter import ttk, END
+from tkinter import ttk
 from tkinter.filedialog import asksaveasfile
 
 import matplotlib
 
-import frequency_analysis
-from frequency_analysis import Language
+import alphabet_utils
+import tkwidget_utils
+from Mode import Mode
+from alphabet_utils import Language, lowercase_alphabet, shifted_alphabet
 
 matplotlib.use('TkAgg')
 
-
-def shift_list(l: list, step: int) -> list:
-    result = list(l)
-    for index, elem in enumerate(l):
-        result[index] = l[(index + step) % len(l)]
-    return result
-
-
-def get_text_from_widget(widget: tk.Text) -> str:
-    return widget.get("1.0", END)
-
-
-def set_text_in_widget(widget: tk.Text, text: str):
-    widget.delete("1.0", END)
-    widget.insert("1.0", text)
-
-
 class CaesarApp(tk.Tk):
-    default_font = ("Helvetica", 18)
+    default_label_font = ("Helvetica", 18)
+    default_message_font = ("Courier", 18)
 
-    def alphabet(self):
-        return [c.upper() for c in frequency_analysis.alphabet_for_language(self.selected_language)]
+    def uppercase_alphabet(self):
+        return [c.upper() for c in lowercase_alphabet(self.selected_language)]
 
     def update_ui(self):
         self.create_table(self.table_frame,
-                          row1=self.alphabet(),
-                          row2=shift_list(self.alphabet(), self.cipher_key))
+                          row1=self.uppercase_alphabet(),
+                          row2=[c.upper() for c in shifted_alphabet(self.selected_language,
+                                                                    self.cipher_key)])
 
         if self.last_action_encrypt:
             self.encrypt_text()
@@ -78,15 +65,12 @@ class CaesarApp(tk.Tk):
         for r in range(2):
             parent.grid_rowconfigure(r, weight=1)
 
-    def translate(self, message: str, src_alphabet: list, dst_alphabet: list) -> str:
+    def translate(self, message: str, mode: Mode) -> str:
         result = []
         for c in message:
-            capitalized = c.upper()
-            try:
-                translated = dst_alphabet[src_alphabet.index(capitalized)]
-            except:
-                translated = c
-            result += (translated.upper() if c.isupper() else translated.lower())
+            result += alphabet_utils.shifted_letter(c,
+                                                    self.selected_language,
+                                                    self.cipher_key if mode == Mode.ENCRYPTION else -self.cipher_key)
 
         return ''.join(result)
 
@@ -95,24 +79,22 @@ class CaesarApp(tk.Tk):
         self.update_cipher_key()
 
         encryption_result = self.translate(
-            get_text_from_widget(self.clear_text_widget),
-            self.alphabet(),
-            shift_list(self.alphabet(), self.cipher_key)
+            tkwidget_utils.get_text_from_widget(self.clear_text_widget),
+            Mode.ENCRYPTION
         )
 
-        set_text_in_widget(self.cipher_text_widget, encryption_result)
+        tkwidget_utils.set_text_in_widget(self.cipher_text_widget, encryption_result)
 
     def decrypt_text(self):
         self.last_action_encrypt = False
         self.update_cipher_key()
 
         decryption_result = self.translate(
-            get_text_from_widget(self.cipher_text_widget),
-            shift_list(self.alphabet(), self.cipher_key),
-            self.alphabet()
+            tkwidget_utils.get_text_from_widget(self.cipher_text_widget),
+            Mode.DECRYPTION
         )
 
-        set_text_in_widget(self.clear_text_widget, decryption_result)
+        tkwidget_utils.set_text_in_widget(self.clear_text_widget, decryption_result)
 
     def __init__(self):
         super().__init__()
@@ -140,7 +122,7 @@ class CaesarApp(tk.Tk):
         # Place the language selection buttons
         lang_frame = tk.Frame(self)
         lang_frame.grid(row=0, column=2)
-        lang_label = tk.Label(lang_frame, text="Clear text language: ", font=self.default_font)
+        lang_label = tk.Label(lang_frame, text="Clear text language: ", font=self.default_label_font)
         lang_label.pack(side='left')
 
         # Variable to hold the selected value
@@ -149,13 +131,13 @@ class CaesarApp(tk.Tk):
         # Create radiobuttons
         es_radio = tk.Radiobutton(lang_frame, text=Language.to_string(Language.ESP), variable=lang_var,
                                   value=Language.to_string(Language.ESP),
-                                  font=self.default_font,
+                                  font=self.default_label_font,
                                   command=lambda: self.on_select_language(lang_var.get()))
         es_radio.pack(side='left')
 
         en_radio = tk.Radiobutton(lang_frame, text=Language.to_string(Language.ENG), variable=lang_var,
                                   value=Language.to_string(Language.ENG),
-                                  font=self.default_font,
+                                  font=self.default_label_font,
                                   command=lambda: self.on_select_language(lang_var.get()))
         en_radio.pack(side='left')
 
@@ -167,13 +149,13 @@ class CaesarApp(tk.Tk):
         # Add key entry file
         key_frame = tk.Frame(self)
         key_frame.grid(row=0, column=0)
-        guide_label = tk.Label(key_frame, text="Caesar key:", font=self.default_font)
+        guide_label = tk.Label(key_frame, text="Caesar key:", font=self.default_label_font)
         guide_label.pack(padx=5, side='left')
 
         # Use a StringVar to track and display the selected key
         self.cipher_key_text = tk.StringVar()
         self.cipher_key_text.set("0")
-        cipher_key_entry = tk.Entry(key_frame, textvariable=self.cipher_key_text, width=3, font=self.default_font)
+        cipher_key_entry = tk.Entry(key_frame, textvariable=self.cipher_key_text, width=3, font=self.default_label_font)
         cipher_key_entry.pack(padx=5, side='left')
         cipher_key_entry.bind('<Return>', self.on_enter_pressed)
 
@@ -192,7 +174,7 @@ class CaesarApp(tk.Tk):
         # Create a Text widget with a Scrollbar
         clear_text_label = tk.Label(clear_text_frame, text='Clear text')
         clear_text_label.grid(row=0, column=0, columnspan=2)
-        self.clear_text_widget = tk.Text(clear_text_frame, width=27, wrap=tk.WORD, font=self.default_font)
+        self.clear_text_widget = tk.Text(clear_text_frame, width=27, wrap=tk.WORD, font=self.default_message_font)
         self.clear_text_widget.grid(row=1, column=0, padx=(20, 0), sticky="nsew")
 
         clear_scrollbar = tk.Scrollbar(clear_text_frame, command=self.clear_text_widget.yview)
@@ -237,7 +219,7 @@ class CaesarApp(tk.Tk):
         # Create a Text widget with a Scrollbar
         cipher_text_label = tk.Label(cipher_text_frame, text='Encrypted text')
         cipher_text_label.grid(row=0, column=0, columnspan=2)
-        self.cipher_text_widget = tk.Text(cipher_text_frame, wrap=tk.WORD, width=27, font=("Helvetica", 20))
+        self.cipher_text_widget = tk.Text(cipher_text_frame, wrap=tk.WORD, width=27, font=self.default_message_font)
         self.cipher_text_widget.grid(row=1, column=0, sticky="nsew")
 
         cipher_scrollbar = tk.Scrollbar(cipher_text_frame, command=self.cipher_text_widget.yview)
@@ -247,8 +229,9 @@ class CaesarApp(tk.Tk):
         # Create a 'Save' button and place it to the left of the second row
         cipher_save_button = tk.Button(cipher_text_frame,
                                        text="Save to file",
-                                       command=lambda: self.save_as_file(get_text_from_widget(self.cipher_text_widget),
-                                                                         "caesar-encrypted.txt"))
+                                       command=lambda: self.save_as_file(tkwidget_utils.get_text_from_widget(
+                                           self.cipher_text_widget),
+                                           "caesar-encrypted.txt"))
         cipher_save_button.grid(row=2, column=0, columnspan=2, sticky="w")
 
         self.update_ui()

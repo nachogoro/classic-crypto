@@ -92,7 +92,7 @@ class TwoFileHistogramPlotter(tk.Tk):
 
     def compute_similarity(self):
         return frequency_analysis.similarity(
-            frequency_analysis.frequency_per_language(self.selected_language),
+            self.target_histogram,
             frequency_analysis.slide_histogram(self.sliding_histogram, self.slide_value)
         )
 

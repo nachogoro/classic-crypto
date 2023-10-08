@@ -5,36 +5,20 @@ from tkinter.filedialog import asksaveasfile
 
 import matplotlib
 
+import alphabet_utils
 import frequency_analysis
+import tkwidget_utils
+from Mode import Mode
 from frequency_analysis import Language
 
 matplotlib.use('TkAgg')
 
-class Mode(Enum):
-    ENCRYPTION = 1
-    DECRYPTION = 2
-
-def shift_list(l: list, step: int) -> list:
-    result = list(l)
-    for index, elem in enumerate(l):
-        result[index] = l[(index + step) % len(l)]
-    return result
-
-
-def get_text_from_widget(widget: tk.Text) -> str:
-    return widget.get("1.0", END)
-
-
-def set_text_in_widget(widget: tk.Text, text: str):
-    widget.delete("1.0", END)
-    widget.insert("1.0", text)
-
-
 class VigenereApp(tk.Tk):
-    default_font = ("Helvetica", 18)
+    default_label_font = ("Helvetica", 18)
+    default_message_font = ("Courier", 18)
 
-    def alphabet(self):
-        return [c.upper() for c in frequency_analysis.alphabet_for_language(self.selected_language)]
+    def uppercase_alphabet(self):
+        return [c.upper() for c in alphabet_utils.lowercase_alphabet(self.selected_language)]
 
     def update_ui(self):
         if self.last_action_encrypt:
@@ -58,31 +42,34 @@ class VigenereApp(tk.Tk):
 
     def update_cipher_key(self):
         new_key = self.cipher_key_text.get()
-        if not new_key or len(set(new_key).difference(set(self.alphabet()))) > 0:
+        if not new_key or len(set(new_key).difference(set(self.uppercase_alphabet()))) > 0:
             # Invalid symbols or empty key
             self.cipher_key_text.set("")
             self.cipher_key = [0]
             return
 
-        self.cipher_key = [self.alphabet().index(c.upper()) for c in new_key]
+        self.cipher_key = [self.uppercase_alphabet().index(c.upper()) for c in new_key]
 
 
     def translate(self, message: str, mode: Mode) -> str:
         result = []
-        src_alphabet = self.alphabet()
 
+        processed_letters = 0
         for index in range(len(message)):
-            offset = self.cipher_key[index % len(self.cipher_key)]
-            dst_alphabet = shift_list(src_alphabet, offset if mode == Mode.ENCRYPTION else -offset)
+            to_translate = message[index]
 
-            capitalized = message[index].upper()
+            if not alphabet_utils.is_in_alphabet(self.selected_language, to_translate):
+                result += to_translate
+                continue
 
-            try:
-                translated = dst_alphabet[src_alphabet.index(capitalized)]
-            except:
-                translated = message[index]
+            offset = self.cipher_key[processed_letters % len(self.cipher_key)]
+            if mode == Mode.DECRYPTION:
+                offset = -offset
 
-            result += (translated.upper() if message[index].isupper() else translated.lower())
+            result += alphabet_utils.shifted_letter(to_translate,
+                                                    self.selected_language,
+                                                    offset)
+            processed_letters += 1
 
         return ''.join(result)
 
@@ -91,22 +78,24 @@ class VigenereApp(tk.Tk):
         self.update_cipher_key()
 
         encryption_result = self.translate(
-            get_text_from_widget(self.clear_text_widget),
+            tkwidget_utils.get_text_from_widget(self.clear_text_widget),
             Mode.ENCRYPTION
         )
 
-        set_text_in_widget(self.cipher_text_widget, encryption_result)
+        tkwidget_utils.set_text_in_widget(self.cipher_text_widget,
+                                          encryption_result)
 
     def decrypt_text(self):
         self.last_action_encrypt = False
         self.update_cipher_key()
 
         decryption_result = self.translate(
-            get_text_from_widget(self.cipher_text_widget),
-            Mode.ENCRYPTION
+            tkwidget_utils.get_text_from_widget(self.cipher_text_widget),
+            Mode.DECRYPTION
         )
 
-        set_text_in_widget(self.clear_text_widget, decryption_result)
+        tkwidget_utils.set_text_in_widget(self.clear_text_widget,
+                                          decryption_result)
 
     def __init__(self):
         super().__init__()
@@ -133,7 +122,7 @@ class VigenereApp(tk.Tk):
         # Place the language selection buttons
         lang_frame = tk.Frame(self)
         lang_frame.grid(row=0, column=2)
-        lang_label = tk.Label(lang_frame, text="Clear text language: ", font=self.default_font)
+        lang_label = tk.Label(lang_frame, text="Clear text language: ", font=self.default_label_font)
         lang_label.pack(side='left')
 
         # Variable to hold the selected value
@@ -142,13 +131,13 @@ class VigenereApp(tk.Tk):
         # Create radiobuttons
         es_radio = tk.Radiobutton(lang_frame, text=Language.to_string(Language.ESP), variable=lang_var,
                                   value=Language.to_string(Language.ESP),
-                                  font=self.default_font,
+                                  font=self.default_label_font,
                                   command=lambda: self.on_select_language(lang_var.get()))
         es_radio.pack(side='left')
 
         en_radio = tk.Radiobutton(lang_frame, text=Language.to_string(Language.ENG), variable=lang_var,
                                   value=Language.to_string(Language.ENG),
-                                  font=self.default_font,
+                                  font=self.default_label_font,
                                   command=lambda: self.on_select_language(lang_var.get()))
         en_radio.pack(side='left')
 
@@ -160,7 +149,7 @@ class VigenereApp(tk.Tk):
         # Add key entry file
         key_frame = tk.Frame(self)
         key_frame.grid(row=0, column=0)
-        guide_label = tk.Label(key_frame, text="Vigènere key:", font=self.default_font)
+        guide_label = tk.Label(key_frame, text="Vigènere key:", font=self.default_label_font)
         guide_label.pack(padx=5, side='left')
 
         # Use a StringVar to track and display the selected key
@@ -168,7 +157,7 @@ class VigenereApp(tk.Tk):
         cipher_key_entry = tk.Entry(key_frame,
                                     textvariable=self.cipher_key_text,
                                     width=15,
-                                    font=self.default_font)
+                                    font=self.default_message_font)
         cipher_key_entry.pack(padx=5, side='left')
         cipher_key_entry.bind('<Return>', self.on_enter_pressed)
 
@@ -183,7 +172,7 @@ class VigenereApp(tk.Tk):
         # Create a Text widget with a Scrollbar
         clear_text_label = tk.Label(clear_text_frame, text='Clear text')
         clear_text_label.grid(row=0, column=0, columnspan=2)
-        self.clear_text_widget = tk.Text(clear_text_frame, width=27, wrap=tk.WORD, font=self.default_font)
+        self.clear_text_widget = tk.Text(clear_text_frame, width=27, wrap=tk.WORD, font=self.default_message_font)
         self.clear_text_widget.grid(row=1, column=0, padx=(20, 0), sticky="nsew")
 
         clear_scrollbar = tk.Scrollbar(clear_text_frame, command=self.clear_text_widget.yview)
@@ -193,8 +182,9 @@ class VigenereApp(tk.Tk):
         # Create a 'Save' button and place it to the left of the second row
         clear_save_button = tk.Button(clear_text_frame,
                                       text="Save to file",
-                                      command=lambda: self.save_as_file(get_text_from_widget(self.clear_text_widget),
-                                                                        "vigenere-in-clear.txt"))
+                                      command=lambda: self.save_as_file(
+                                          tkwidget_utils.get_text_from_widget(self.clear_text_widget),
+                                          "vigenere-in-clear.txt"))
         clear_save_button.grid(row=2, column=0, columnspan=2, sticky="e")
 
         translation_frame = tk.Frame(self)
@@ -228,7 +218,7 @@ class VigenereApp(tk.Tk):
         # Create a Text widget with a Scrollbar
         cipher_text_label = tk.Label(cipher_text_frame, text='Encrypted text')
         cipher_text_label.grid(row=0, column=0, columnspan=2)
-        self.cipher_text_widget = tk.Text(cipher_text_frame, wrap=tk.WORD, width=27, font=("Helvetica", 20))
+        self.cipher_text_widget = tk.Text(cipher_text_frame, wrap=tk.WORD, width=27, font=self.default_message_font)
         self.cipher_text_widget.grid(row=1, column=0, sticky="nsew")
 
         cipher_scrollbar = tk.Scrollbar(cipher_text_frame, command=self.cipher_text_widget.yview)
@@ -238,8 +228,9 @@ class VigenereApp(tk.Tk):
         # Create a 'Save' button and place it to the left of the second row
         cipher_save_button = tk.Button(cipher_text_frame,
                                        text="Save to file",
-                                       command=lambda: self.save_as_file(get_text_from_widget(self.cipher_text_widget),
-                                                                         "vigenere-encrypted.txt"))
+                                       command=lambda: self.save_as_file(
+                                           tkwidget_utils.get_text_from_widget(self.cipher_text_widget),
+                                           "vigenere-encrypted.txt"))
         cipher_save_button.grid(row=2, column=0, columnspan=2, sticky="w")
 
         self.update_ui()
