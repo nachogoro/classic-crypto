@@ -74,8 +74,15 @@ class CaesarApp(tk.Tk):
 
         return ''.join(result)
 
-    def encrypt_text(self):
+    def on_encryption_selected(self):
         self.last_action_encrypt = True
+        self.update_ui()
+
+    def on_decryption_selected(self):
+        self.last_action_encrypt = False
+        self.update_ui()
+
+    def encrypt_text(self):
         self.update_cipher_key()
 
         encryption_result = self.translate(
@@ -86,7 +93,6 @@ class CaesarApp(tk.Tk):
         tkwidget_utils.set_text_in_widget(self.cipher_text_widget, encryption_result)
 
     def decrypt_text(self):
-        self.last_action_encrypt = False
         self.update_cipher_key()
 
         decryption_result = self.translate(
@@ -192,10 +198,10 @@ class CaesarApp(tk.Tk):
         translation_frame.grid(row=2, column=1, sticky='nswe')
 
         # Buttons
-        encrypt_button = tk.Button(translation_frame, text=">", command=self.encrypt_text)
+        encrypt_button = tk.Button(translation_frame, text=">", command=self.on_encryption_selected)
         encrypt_button.grid(row=1, column=1)
 
-        decrypt_button = tk.Button(translation_frame, text="<", command=self.decrypt_text)
+        decrypt_button = tk.Button(translation_frame, text="<", command=self.on_decryption_selected)
         decrypt_button.grid(row=2, column=1)
 
         # Configure translation_frame rows and columns for centering
