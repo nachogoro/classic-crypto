@@ -6,12 +6,37 @@ import classiccrypto.utils.frequency
 
 
 def crack(ciphertext: str, lang: Language, fast:bool) -> AffineKey:
+    """
+    Attempt to crack a ciphertext encrypted with the Affine cipher using statistical analysis.
+
+    Args:
+        ciphertext (str): The encrypted message.
+        lang (Language): The language object to be used for decryption.
+        fast (bool): If True, use a faster but possibly less accurate cracking method.
+
+    Returns:
+        AffineKey: The most likely key to have been used for the encryption.
+    """
     if fast:
         return crack_congruence(ciphertext, lang)
     return crack_bruteforce(ciphertext, lang)
 
 
 def crack_bruteforce(ciphertext: str, lang: Language) -> AffineKey:
+    """
+    Attempt to crack an Affine cipher by brute-forcing all possible keys.
+
+    This function decrypts the `ciphertext` with all possible keys, comparing the decrypted text's
+    letter frequency histogram to the reference language histogram and selecting the key for which
+    the decrypted text has the highest similarity to the reference language.
+
+    Args:
+        ciphertext (str): The encrypted message.
+        lang (Language): The language object to be used for decryption.
+
+    Returns:
+        AffineKey: The key that yields the most likely plaintext, based on letter frequency.
+    """
     clear_alphabet = alphabets.alphabet(lang, LetterCase.UPPER)
     n = len(clear_alphabet)
 
@@ -39,6 +64,20 @@ def crack_bruteforce(ciphertext: str, lang: Language) -> AffineKey:
 
 
 def crack_congruence(ciphertext: str, lang: Language) -> AffineKey | None:
+    """
+    Attempt to crack an Affine cipher using congruence relations between the most frequent letters.
+
+    This function determines the most frequent letters in the `ciphertext` and in a reference
+    language, then uses their positions to estimate the most likely key using congruence relations.
+
+    Args:
+        ciphertext (str): The encrypted message.
+        lang (Language): The language object to be used for decryption.
+
+    Returns:
+        AffineKey: The most likely key to have been used for the encryption, or None if a likely
+                   key couldn't be determined.
+    """
     language_histogram = classiccrypto.utils.frequency.language_histogram(lang)
     cipher_histogram = classiccrypto.utils.frequency.normalized_histogram(ciphertext, lang)
 

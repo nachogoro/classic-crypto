@@ -5,12 +5,23 @@ from classiccrypto.utils import frequency
 
 
 def create_histogram_figure(histogram: list, title: str, y_label: str) -> Figure:
+    """
+    Create a matplotlib Figure object representing a bar chart of the given histogram data.
+
+    Args:
+        histogram (list): A list of (key, value) pairs representing the histogram data.
+        title (str): The title to be displayed above the histogram.
+        y_label (str): The label for the y-axis.
+
+    Returns:
+        Figure: A matplotlib Figure object displaying the histogram.
+    """
     letters = [k for (k,v) in histogram]
-    frequency = [v for (k,v) in histogram]
+    letter_freqs = [v for (k,v) in histogram]
 
     figure = Figure(figsize=(4, 4), dpi=100)
     axes = figure.add_subplot()
-    axes.bar(list(letters), list(frequency))
+    axes.bar(list(letters), list(letter_freqs))
     axes.set_title(title)
     axes.set_ylabel(y_label)
 
@@ -18,6 +29,19 @@ def create_histogram_figure(histogram: list, title: str, y_label: str) -> Figure
 
 
 def update_histogram_figure(figure: Figure, histogram: list, title: str = None, ylabel: str = None):
+    """
+    Update a matplotlib Figure object with new histogram data while maintaining the previous titles and labels
+    if new ones are not provided.
+
+    Args:
+        figure (Figure): A matplotlib Figure object to be updated.
+        histogram (list): A list of (key, value) pairs representing the new histogram data.
+        title (str, optional): A new title for the histogram. If None, the previous title is kept.
+        ylabel (str, optional): A new y-axis label for the histogram. If None, the previous label is kept.
+
+    Returns:
+        None
+    """
     axes = figure.get_axes()[0]
 
     current_title = axes.title.get_text()
@@ -31,6 +55,19 @@ def update_histogram_figure(figure: Figure, histogram: list, title: str = None, 
 
 
 def display_histogram_figure_in_popup(data: list):
+    """
+    Display a bar chart of the provided histogram data in a pop-up window using matplotlib's pyplot.
+
+    This function filters out keys with zero values, sorts the data, separates keys and values, and
+    plots a histogram with labeled axes and a title.
+
+    Args:
+        data (list): A list of (key, value) pairs representing the histogram data.
+
+    Returns:
+        None
+    """
+
     # Filter out keys with zero values and then sort
     sorted_data = frequency.sort_histogram_by_key([(k, v) for k, v in data if v > 0])
 

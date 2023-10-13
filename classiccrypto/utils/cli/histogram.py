@@ -8,6 +8,18 @@ class AsciiHistogramDisplayMode(Enum):
     VERTICAL = 2
 
 def display_ascii_histogram(histogram: list, display_mode: AsciiHistogramDisplayMode):
+    """
+    Displays an ASCII histogram in either horizontal or vertical orientation based on the specified display mode.
+
+    Args:
+        histogram (list): A list of (key, value) pairs representing the histogram data.
+        display_mode (AsciiHistogramDisplayMode): An enum indicating the desired display mode, either HORIZONTAL or
+        VERTICAL.
+
+    Returns:
+        None
+    """
+
     if display_mode == AsciiHistogramDisplayMode.HORIZONTAL:
         _display_horizontal(histogram)
     else:
@@ -15,10 +27,18 @@ def display_ascii_histogram(histogram: list, display_mode: AsciiHistogramDisplay
 
 def _display_horizontal(histogram: list):
     """
-    Print an ASCII histogram given a list of (key, value) pairs.
+    Displays an ASCII histogram horizontally given a list of (key, value) pairs.
 
-    :param histogram: list of (key, value) pairs.
+    This is a private function that prints the histogram to stdout with the keys
+    displayed vertically on the left and bars extending to the right.
+
+    Args:
+        histogram (list): A list of (key, value) pairs representing the histogram data.
+
+    Returns:
+        None
     """
+
     # Find the longest key for alignment purposes
     max_key_len = max(len(str(key)) for key, value in histogram)
 
@@ -37,9 +57,16 @@ def _display_horizontal(histogram: list):
 
 def _display_vertical(histogram: list):
     """
-    Print an ASCII vertical histogram given a list of (key, value) pairs.
+    Displays an ASCII histogram vertically given a list of (key, value) pairs.
 
-    :param histogram: list of (key, value) pairs.
+    This is a private function that prints the histogram to stdout with the keys
+    displayed horizontally at the bottom and bars extending upwards.
+
+    Args:
+        histogram (list): A list of (key, value) pairs representing the histogram data.
+
+    Returns:
+        None
     """
     histogram = frequency.sort_histogram_by_key(histogram)
     # Find the longest key for alignment purposes

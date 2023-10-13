@@ -3,6 +3,17 @@ from classiccrypto.utils import Language, LetterCase
 
 
 def normalized_histogram(s: str, lang: Language) -> list:
+    """
+    Computes a normalized histogram of letter frequencies in a string.
+
+    Args:
+        s (str): The input string from which to compute the histogram.
+        lang (Language): The language enum indicating the considered alphabet.
+
+    Returns:
+        list: A list of tuples, each containing a letter and its normalized frequency.
+    """
+
     # Define the alphabet for each language
     alphabet = alphabets.alphabet(lang, LetterCase.LOWER)
 
@@ -25,6 +36,16 @@ def normalized_histogram(s: str, lang: Language) -> list:
 
 
 def language_histogram(lang: Language) -> list:
+    """
+    Retrieves a pre-defined normalized histogram for a given language.
+
+    Args:
+        lang (Language): The language enum indicating which language's histogram to retrieve.
+
+    Returns:
+        list: A list of tuples, each containing a letter and its frequency in the language.
+    """
+
     if not hasattr(language_histogram, "esp_histogram"):
         language_histogram.esp_histogram = {
             'a': 12.53, 'b': 1.42, 'c': 4.68, 'd': 5.86, 'e': 13.68, 'f': 0.69, 'g': 1.01, 'h': 0.70, 'i': 6.25,
@@ -50,10 +71,31 @@ def language_histogram(lang: Language) -> list:
 
 
 def empty_histogram(lang: Language) -> list:
+    """
+    Generates an empty histogram for a given language.
+
+    Args:
+        lang (Language): The language enum indicating the considered alphabet.
+
+    Returns:
+        list: A list of tuples, each containing a letter and a frequency of 0.
+    """
+
     return [(k, 0) for k in alphabets.alphabet(lang, LetterCase.LOWER)]
 
 
 def similarity(histo1: list, histo2: list) -> float:
+    """
+    Calculates the similarity between two normalized histograms using squared differences.
+
+    Args:
+        histo1 (list): The first histogram as a list of tuples.
+        histo2 (list): The second histogram as a list of tuples.
+
+    Returns:
+        float: A measure of similarity between the histograms (1 - sum of squared differences).
+    """
+
     shortest = histo1 if len(histo1) < len(histo2) else histo2
     longest = histo2 if len(histo1) < len(histo2) else histo1
 
@@ -79,10 +121,32 @@ def _shift_list(l: list, step: int) -> list:
 
 
 def slide_histogram(histogram: list, step: int) -> list:
+    """
+    Shifts a histogram by a specified step to the right, wrapping around at the alphabet's end.
+
+    Args:
+        histogram (list): The input histogram as a list of tuples.
+        step (int): The number of positions to shift the histogram.
+
+    Returns:
+        list: The shifted histogram as a list of tuples.
+    """
+
     return _shift_list(histogram, step)
 
 
 def histogram_from_file(filepath: str, lang: Language) -> list:
+    """
+    Computes a normalized histogram from a text file's contents.
+
+    Args:
+        filepath (str): The path to the text file.
+        lang (Language): The language enum indicating the considered alphabet.
+
+    Returns:
+        list: A histogram as a list of tuples, or an empty histogram if file reading fails.
+    """
+
     try:
         if filepath:
             with open(filepath, 'r') as file:
@@ -117,6 +181,15 @@ def find_step_for_best_match(target_histogram: list, sliding_histogram: list) ->
 
 
 def sort_histogram_by_key(histogram: list) -> list:
+    """
+    Sorts a histogram by its keys, taking care of specific language characters.
+
+    Args:
+        histogram (list): The input histogram as a list of tuples.
+
+    Returns:
+        list: The histogram sorted by its keys.
+    """
     if not histogram:
         return []
 

@@ -5,14 +5,45 @@ from classiccrypto.utils import Mode
 
 
 def encrypt(message: str, key: AffineKey) -> str:
+    """
+    Encrypt a message using the Affine cipher with the provided key.
+
+    Args:
+        message (str): The message to be encrypted.
+        key (AffineKey): The key to be used for encryption.
+
+    Returns:
+        str: The encrypted message.
+    """
     return translate(message, key, Mode.ENCRYPTION)
 
 
 def decrypt(message: str, key: AffineKey) -> str:
+    """
+    Decrypt a message using the Affine cipher with the provided key.
+
+    Args:
+        message (str): The message to be decrypted.
+        key (AffineKey): The key to be used for decryption.
+
+    Returns:
+        str: The decrypted message.
+    """
     return translate(message, key, Mode.DECRYPTION)
 
 
 def translate(message: str, key: AffineKey, mode: Mode) -> str:
+    """
+    Translate (encrypt/decrypt) a message using the Affine cipher based on the provided key and mode.
+
+    Args:
+        message (str): The message to be translated.
+        key (AffineKey): The key to be used for translation.
+        mode (Mode): The mode of translation - can be either ENCRYPTION or DECRYPTION.
+
+    Returns:
+        str: The translated message.
+    """
     original_alphabet = alphabets.alphabet(key.lang,
                                            LetterCase.UPPER)
 
