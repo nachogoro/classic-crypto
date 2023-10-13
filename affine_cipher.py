@@ -1,3 +1,4 @@
+import math
 import tkinter as tk
 from tkinter import ttk
 from tkinter.filedialog import asksaveasfile
@@ -66,6 +67,14 @@ class AffineApp(tk.Tk):
             self.cipher_key = AffineKey(int(self.a_cipher_text.get()),
                                         int(self.b_cipher_text.get()),
                                         self.cipher_key.lang)
+
+            if math.gcd(self.cipher_key.a,
+                        len(alphabets.alphabet(self.cipher_key.lang, LetterCase.LOWER))) != 1:
+                # This key does not result in a bijective transformation
+                self.hiding_label.lower(self.warning_label)
+            else:
+                # Hide the warning
+                self.hiding_label.lift(self.warning_label)
         except ValueError:
             self.cipher_key = AffineKey(1, 0, self.cipher_key.lang)
             self.a_cipher_text.set("1")
@@ -170,6 +179,11 @@ class AffineApp(tk.Tk):
         b_cipher_key_entry = tk.Entry(key_frame, textvariable=self.b_cipher_text, width=3, font=self.default_label_font)
         b_cipher_key_entry.pack(padx=5, side='left')
         b_cipher_key_entry.bind('<Return>', self.on_enter_pressed)
+
+        self.warning_label = tk.Label(self, text="Invalid key!", font=self.default_label_font, fg="red")
+        self.warning_label.grid(row=0, column=1)
+        self.hiding_label = tk.Label(self, text="", font=self.default_label_font)
+        self.hiding_label.grid(row=0, column=1, sticky='we')
 
         # Add table
         self.table_frame = tk.Frame(self)
