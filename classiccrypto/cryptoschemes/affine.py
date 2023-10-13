@@ -1,7 +1,7 @@
-from classiccrypto.utils import alphabets
-from classiccrypto.utils.alphabets import LetterCase
 from classiccrypto.cryptoschemes.keys.affine import AffineKey
 from classiccrypto.utils import Mode
+from classiccrypto.utils import alphabets
+from classiccrypto.utils.alphabets import LetterCase
 
 
 def encrypt(message: str, key: AffineKey) -> str:

@@ -1,13 +1,14 @@
 import argparse
 from enum import Enum
 
-from classiccrypto.cryptoschemes.keys.cipherkey import Cipherkey
-import classiccrypto.cryptoschemes.cracking.vigenere
-import classiccrypto.cryptoschemes.cracking.caesar
-import classiccrypto.cryptoschemes.cracking.affine
-from classiccrypto.utils import alphabets
-from classiccrypto.utils import Language
 import classiccrypto
+import classiccrypto.cryptoschemes.cracking.affine
+import classiccrypto.cryptoschemes.cracking.caesar
+import classiccrypto.cryptoschemes.cracking.vigenere
+from classiccrypto.cryptoschemes.keys.cipherkey import Cipherkey
+from classiccrypto.utils import Language
+from classiccrypto.utils import alphabets
+
 
 class Cryptoscheme(Enum):
     CAESAR = 1

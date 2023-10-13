@@ -4,10 +4,10 @@ from tkinter.filedialog import asksaveasfile
 
 import matplotlib
 
-from classiccrypto.utils import alphabets, LetterCase, Language
-from classiccrypto.utils.gui import tkwidget_utils
 from classiccrypto.cryptoschemes import caesar
 from classiccrypto.cryptoschemes.keys.caesar import CaesarKey
+from classiccrypto.utils import alphabets, LetterCase, Language
+from classiccrypto.utils.gui import tkwidget_utils
 
 matplotlib.use('TkAgg')
 

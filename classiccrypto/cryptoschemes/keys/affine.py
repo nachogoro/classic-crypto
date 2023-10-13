@@ -1,5 +1,5 @@
-from classiccrypto.utils import Language
 from classiccrypto.cryptoschemes.keys.cipherkey import Cipherkey
+from classiccrypto.utils import Language
 
 
 class AffineKey(Cipherkey):

@@ -1,11 +1,11 @@
 import math
 
-from classiccrypto.utils import alphabets, Language, LetterCase
-from classiccrypto.cryptoschemes.affine import decrypt, AffineKey
 import classiccrypto.utils.frequency
+from classiccrypto.cryptoschemes.affine import decrypt, AffineKey
+from classiccrypto.utils import alphabets, Language, LetterCase
 
 
-def crack(ciphertext: str, lang: Language, fast:bool) -> AffineKey:
+def crack(ciphertext: str, lang: Language, fast: bool) -> AffineKey:
     """
     Attempt to crack a ciphertext encrypted with the Affine cipher using statistical analysis.
 

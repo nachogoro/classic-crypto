@@ -1,5 +1,5 @@
-from classiccrypto.utils import LetterCase, Language
 from classiccrypto.cryptoschemes.affine import AffineKey
+from classiccrypto.utils import LetterCase, Language
 
 
 def alphabet(lang: Language, case: LetterCase) -> list:

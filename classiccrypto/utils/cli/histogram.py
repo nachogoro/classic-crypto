@@ -7,6 +7,7 @@ class AsciiHistogramDisplayMode(Enum):
     HORIZONTAL = 1
     VERTICAL = 2
 
+
 def display_ascii_histogram(histogram: list, display_mode: AsciiHistogramDisplayMode):
     """
     Displays an ASCII histogram in either horizontal or vertical orientation based on the specified display mode.
@@ -19,6 +20,7 @@ def display_ascii_histogram(histogram: list, display_mode: AsciiHistogramDisplay
         _display_horizontal(histogram)
     else:
         _display_vertical(histogram)
+
 
 def _display_horizontal(histogram: list):
     """
@@ -45,6 +47,7 @@ def _display_horizontal(histogram: list):
 
         # Print the key and value, aligned and scaled
         print(f"{str(key).rjust(max_key_len)} | {'#' * scaled_value} ({value})")
+
 
 def _display_vertical(histogram: list):
     """

@@ -1,6 +1,6 @@
 import classiccrypto.utils.frequency
-from classiccrypto.utils import Language, LetterCase, alphabets
 from classiccrypto.cryptoschemes.caesar import CaesarKey
+from classiccrypto.utils import Language, LetterCase, alphabets
 
 
 def crack(ciphertext: str, lang: Language, fast: bool) -> CaesarKey:

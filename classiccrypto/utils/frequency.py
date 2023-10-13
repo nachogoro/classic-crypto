@@ -1,5 +1,5 @@
-from classiccrypto.utils import alphabets
 from classiccrypto.utils import Language, LetterCase
+from classiccrypto.utils import alphabets
 
 
 def normalized_histogram(s: str, lang: Language) -> list:
@@ -187,7 +187,7 @@ def sort_histogram_by_key(histogram: list) -> list:
     if not histogram:
         return []
 
-    if isinstance(histogram[0][0], str) and all(len(c) == 1 for (c,_) in histogram):
+    if isinstance(histogram[0][0], str) and all(len(c) == 1 for (c, _) in histogram):
         # It's a letter histogram, so we need to take care of letter ñ in Spanish
         alphabet = None
         if len(histogram) == len(alphabets.alphabet(Language.ESP, LetterCase.LOWER)):

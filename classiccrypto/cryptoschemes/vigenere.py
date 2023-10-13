@@ -1,6 +1,6 @@
-from classiccrypto.utils import alphabets
 from classiccrypto.cryptoschemes.keys.vigenere import VigenereKey
 from classiccrypto.utils import Mode
+from classiccrypto.utils import alphabets
 
 
 def encrypt(message: str, key: VigenereKey) -> str:

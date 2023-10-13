@@ -1,5 +1,5 @@
-from classiccrypto.utils import alphabets, LetterCase, Language
 from classiccrypto.cryptoschemes.keys.cipherkey import Cipherkey
+from classiccrypto.utils import alphabets, LetterCase, Language
 
 
 class VigenereKey(Cipherkey):

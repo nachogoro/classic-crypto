@@ -1,5 +1,5 @@
-from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 
 from classiccrypto.utils import frequency
 
@@ -15,8 +15,8 @@ def create_histogram_figure(histogram: list, title: str, y_label: str) -> Figure
     :return: A matplotlib Figure object displaying the histogram.
     :rtype: Figure
     """
-    letters = [k for (k,v) in histogram]
-    letter_freqs = [v for (k,v) in histogram]
+    letters = [k for (k, v) in histogram]
+    letter_freqs = [v for (k, v) in histogram]
 
     figure = Figure(figsize=(4, 4), dpi=100)
     axes = figure.add_subplot()
@@ -43,7 +43,7 @@ def update_histogram_figure(figure: Figure, histogram: list, title: str = None, 
     current_ylabel = axes.yaxis.get_label().get_text()
 
     axes.clear()
-    axes.bar([k for (k,v) in histogram], [v for (k,v) in histogram])
+    axes.bar([k for (k, v) in histogram], [v for (k, v) in histogram])
 
     axes.set_title(title if title else current_title)
     axes.set_ylabel(ylabel if ylabel else current_ylabel)

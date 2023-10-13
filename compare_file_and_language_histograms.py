@@ -6,8 +6,8 @@ from tkinter import ttk
 import matplotlib
 
 from classiccrypto.utils import Language, gui
-from classiccrypto.utils.gui import histogram
 from classiccrypto.utils import frequency
+from classiccrypto.utils.gui import histogram
 
 matplotlib.use('TkAgg')
 
