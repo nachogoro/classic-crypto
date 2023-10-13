@@ -9,25 +9,19 @@ class VigenereKey(Cipherkey):
     The VigenereKey class holds the key used in Vigenere cipher operations and provides
     functionality for converting the string key into a sequence of shifts.
 
-    Attributes:
-        key (str): The string used as the cipher key in Vigenere cipher operations.
-        key_as_offset (List[int]): A list of integer offsets derived from `key` and the specified alphabet.
-        lang (Language): Language to be used when using this key
-
-    Methods:
-        to_string: Provide a string representation of the cipher key.
+    :ivar str key: The string used as the cipher key in Vigenere cipher operations.
+    :ivar List[int] key_as_offset: A list of integer offsets derived from `key` and the specified alphabet.
+    :ivar Language lang: Language to be used when using this key
     """
 
     def __init__(self, key: str, lang: Language):
         """
         Initialize a new VigenereKey instance.
 
-        Args:
-            key (str): The string used as the cipher key in Vigenere cipher operations.
-            lang (Language): Instance managing language-specific operations.
+        :param key (str): The string used as the cipher key in Vigenere cipher operations.
+        :param Language lang: Instance managing language-specific operations.
 
-        Raises:
-            ValueError: If `key` is an empty string or contains invalid characters.
+        :raises ValueError: If `key` is an empty string or contains invalid characters.
         """
         super().__init__(lang)
         self.key = key
@@ -43,7 +37,7 @@ class VigenereKey(Cipherkey):
         """
         Generate a string representation of the Vigenere cipher key.
 
-        Returns:
-            str: String representation of the key.
+        :return: String representation of the key.
+        :rtype: str
         """
         return self.key

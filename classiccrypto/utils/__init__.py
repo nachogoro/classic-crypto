@@ -4,10 +4,6 @@ from enum import Enum
 class Mode(Enum):
     """
     Enumeration representing the modes of cryptographic operations.
-
-    Attributes:
-        ENCRYPTION (int): Denotes encryption mode.
-        DECRYPTION (int): Denotes decryption mode.
     """
     ENCRYPTION = 1
     DECRYPTION = 2
@@ -16,14 +12,6 @@ class Mode(Enum):
 class Language(Enum):
     """
     Enumeration representing supported languages for cryptographic operations.
-
-    Attributes:
-        ESP (int): Represents the Spanish language.
-        ENG (int): Represents the English language.
-
-    Methods:
-        from_string: Obtain a Language enum member from its string representation.
-        to_string: Retrieve the string representation of a Language enum member.
     """
 
     ESP = 1
@@ -34,15 +22,13 @@ class Language(Enum):
         """
         Map a string to its corresponding `Language` enumeration member.
 
-        Args:
-            s (str): String representation of a language ("ESP", "ENG").
+        :param str s: String representation of a language ("ESP", "ENG").
 
-        Returns:
-            Language: Corresponding Language enum member.
+        :return: Corresponding Language enum member.
+        :rtype: Language
 
-        Raises:
-            ValueError: If the string does not map to a known Language member.
-        """
+        :raises ValueError: If the string does not map to a known Language member.
+    """
         mapping = {
             "ESP": Language.ESP,
             "ENG": Language.ENG,
@@ -54,15 +40,13 @@ class Language(Enum):
         """
         Retrieve the string identifier of a `Language` enumeration member.
 
-        Args:
-            lang (Language): A Language enum member.
+        :param Language lang: A Language enum member.
 
-        Returns:
-            str: String representation of the provided Language enum member.
+        :return: String representation of the provided Language enum member.
+        :rtype: str
 
-        Raises:
-            ValueError: If the Language member does not have a known string representation.
-        """
+        :raises ValueError: If the Language member does not have a known string representation.
+    """
         mapping = {
             Language.ESP: "ESP",
             Language.ENG: "ENG",
@@ -73,10 +57,6 @@ class Language(Enum):
 class LetterCase(Enum):
     """
     Enumeration representing the case of letters (upper or lower).
-
-    Attributes:
-        UPPER (int): Denotes uppercase letters.
-        LOWER (int): Denotes lowercase letters.
     """
     UPPER = 1
     LOWER = 2

@@ -8,13 +8,12 @@ def create_histogram_figure(histogram: list, title: str, y_label: str) -> Figure
     """
     Create a matplotlib Figure object representing a bar chart of the given histogram data.
 
-    Args:
-        histogram (list): A list of (key, value) pairs representing the histogram data.
-        title (str): The title to be displayed above the histogram.
-        y_label (str): The label for the y-axis.
+    :param list histogram: A list of (key, value) pairs representing the histogram data.
+    :param str title: The title to be displayed above the histogram.
+    :param str y_label: The label for the y-axis.
 
-    Returns:
-        Figure: A matplotlib Figure object displaying the histogram.
+    :return: A matplotlib Figure object displaying the histogram.
+    :rtype: Figure
     """
     letters = [k for (k,v) in histogram]
     letter_freqs = [v for (k,v) in histogram]
@@ -33,14 +32,10 @@ def update_histogram_figure(figure: Figure, histogram: list, title: str = None, 
     Update a matplotlib Figure object with new histogram data while maintaining the previous titles and labels
     if new ones are not provided.
 
-    Args:
-        figure (Figure): A matplotlib Figure object to be updated.
-        histogram (list): A list of (key, value) pairs representing the new histogram data.
-        title (str, optional): A new title for the histogram. If None, the previous title is kept.
-        ylabel (str, optional): A new y-axis label for the histogram. If None, the previous label is kept.
-
-    Returns:
-        None
+    :param Figure figure: A matplotlib Figure object to be updated.
+    :param list histogram: A list of (key, value) pairs representing the new histogram data.
+    :param str title: A new title for the histogram. If None, the previous title is kept.
+    :param str ylabel: A new y-axis label for the histogram. If None, the previous label is kept.
     """
     axes = figure.get_axes()[0]
 
@@ -61,12 +56,10 @@ def display_histogram_figure_in_popup(data: list):
     This function filters out keys with zero values, sorts the data, separates keys and values, and
     plots a histogram with labeled axes and a title.
 
-    Args:
-        data (list): A list of (key, value) pairs representing the histogram data.
+    :param list data: A list of (key, value) pairs representing the histogram data.
 
     Returns:
-        None
-    """
+        None"""
 
     # Filter out keys with zero values and then sort
     sorted_data = frequency.sort_histogram_by_key([(k, v) for k, v in data if v > 0])

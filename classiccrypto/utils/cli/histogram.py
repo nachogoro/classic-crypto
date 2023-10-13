@@ -11,13 +11,8 @@ def display_ascii_histogram(histogram: list, display_mode: AsciiHistogramDisplay
     """
     Displays an ASCII histogram in either horizontal or vertical orientation based on the specified display mode.
 
-    Args:
-        histogram (list): A list of (key, value) pairs representing the histogram data.
-        display_mode (AsciiHistogramDisplayMode): An enum indicating the desired display mode, either HORIZONTAL or
-        VERTICAL.
-
-    Returns:
-        None
+    :param list histogram: A list key, value of () pairs representing the histogram data.
+    :param AsciiHistogramDisplayMode display_mode: An enum indicating the desired display mode.
     """
 
     if display_mode == AsciiHistogramDisplayMode.HORIZONTAL:
@@ -32,11 +27,7 @@ def _display_horizontal(histogram: list):
     This is a private function that prints the histogram to stdout with the keys
     displayed vertically on the left and bars extending to the right.
 
-    Args:
-        histogram (list): A list of (key, value) pairs representing the histogram data.
-
-    Returns:
-        None
+    :param list histogram: A list of (key, value) pairs representing the histogram data.
     """
 
     # Find the longest key for alignment purposes
@@ -62,11 +53,7 @@ def _display_vertical(histogram: list):
     This is a private function that prints the histogram to stdout with the keys
     displayed horizontally at the bottom and bars extending upwards.
 
-    Args:
-        histogram (list): A list of (key, value) pairs representing the histogram data.
-
-    Returns:
-        None
+    :param list histogram: A list of (key, value) pairs representing the histogram data.
     """
     histogram = frequency.sort_histogram_by_key(histogram)
     # Find the longest key for alignment purposes

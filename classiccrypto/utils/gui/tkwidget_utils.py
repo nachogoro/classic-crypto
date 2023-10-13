@@ -6,10 +6,8 @@ def _on_right_click(event, context_menu):
     """
     Displays context menu on right-click event.
 
-    :param event: tk.Event object, contains information about the event such as
-                  the mouse pointer's x and y coordinates.
-    :param context_menu: tk.Menu object, the context menu to be displayed
-                         when right-click event is triggered.
+    :param event: tk.Event object, contains information about the event such as the mouse pointer's x and y coordinates.
+    :param context_menu: tk.Menu object, the context menu to be displayed when right-click event is triggered.
     """
     # Show context menu
     context_menu.post(event.x_root, event.y_root)
@@ -19,7 +17,7 @@ def add_context_menu(widget: tk.Text):
     """
     Adds a context menu to a Tkinter Text widget.
 
-    :param widget: tk.Text object to add context menu to.
+    :param tk.Text widget: object to add context menu to.
     """
     context_menu = tk.Menu(widget, tearoff=0)
     context_menu.add_command(label="Copy", command=lambda: widget.event_generate('<<Copy>>'))
@@ -39,11 +37,10 @@ def get_text_from_widget(widget: tk.Text) -> str:
     This function fetches all the text from a Tkinter Text widget starting
     from the first character until the end, and trims trailing whitespace.
 
-    Args:
-        widget (tk.Text): The Tkinter Text widget from which text is retrieved.
+    :param tk.Text widget: The Tkinter Text widget from which text is retrieved.
 
-    Returns:
-        str: The text retrieved from the Text widget.
+    :return: The text retrieved from the Text widget.
+    :rtype: str
     """
     return widget.get("1.0", END).rstrip()
 
@@ -55,12 +52,8 @@ def set_text_in_widget(widget: tk.Text, text: str):
     This function removes all current text in the widget and inserts
     the new specified text starting from the first character position.
 
-    Args:
-        widget (tk.Text): The Tkinter Text widget where text is set.
-        text (str): The new text to set in the Text widget.
-
-    Returns:
-        None
+    :param tk.Text widget: The Tkinter Text widget where text is set.
+    :param str text: The new text to set in the Text widget.
     """
     widget.delete("1.0", END)
     widget.insert("1.0", text)

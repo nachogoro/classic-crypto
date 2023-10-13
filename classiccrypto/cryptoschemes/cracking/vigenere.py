@@ -16,11 +16,10 @@ def _get_divisors(n):
 
     Utilizes memoization to store previously calculated divisors for efficiency.
 
-    Args:
-        n (int): The integer to find divisors for.
+    :param int n: The integer to find divisors for.
 
-    Returns:
-        list[int]: A list containing all divisors of `n`.
+    :return: A list containing all divisors of `n`.
+    :rtype: list[int]
     """
     if not hasattr(_get_divisors, 'divisors'):
         _get_divisors.divisors = dict()
@@ -42,15 +41,12 @@ def get_separation_of_3_and_4_letter_blocks(msg: str) -> dict:
     """
     Determine the separations between all 3 and 4-letter blocks within a message.
 
-    Args:
-        msg (str): The message to analyze.
+    :param str msg: The message to analyze.
 
-    Returns:
-        dict: A dictionary containing blocks as keys and lists of their respective
-              separations as values.
+    :return: A dictionary containing blocks as keys and lists of their respective separations as values.
+    :rtype: dict
 
-    Raises:
-        RuntimeError: If the message is too short to analyze.
+    :raises RuntimeError: If the message is too short to analyze.
     """
     if len(msg) < 8:
         raise RuntimeError("Cannot analyse message, too short")
@@ -84,19 +80,17 @@ def crack(ciphertext: str, lang: Language, no_gui=False, fast=False) -> Vigenere
     Attempt to crack a ciphertext encrypted with the Vigenere cipher using statistical analysis.
 
     The function can leverage both a GUI-based histogram display and a CLI variant based on the
-    `no_gui` parameter. The process is made up of estimating the key length, analyzing the 
+    `no_gui` parameter. The process is made up of estimating the key length, analyzing the
     distances between recurring trigrams and quadrigrams, and evaluating Caesar cipher on every
     nth letter, according to the guessed key length.
 
-    Args:
-        ciphertext (str): The encrypted message.
-        lang (Language): The language object to be used for decryption.
-        no_gui (bool, optional): If True, utilize CLI for displaying histograms instead of GUI.
-                                 Defaults to False.
-        fast (bool, optional): If True, utilize fast cracking methods. Defaults to False.
+    :param str ciphertext: The encrypted message.
+    :param Language lang: The language object to be used for decryption.
+    :param bool, optional no_gui: If True, utilize CLI for displaying histograms instead of GUI. Defaults to False.
+    :param bool, optional fast: If True, utilize fast cracking methods. Defaults to False.
 
-    Returns:
-        VigenereKey: The most likely key to have been used for the encryption.
+    :return: The most likely key to have been used for the encryption.
+    :rtype: VigenereKey
     """
     # Find separation for all 3 and 4 letter sequences
     distance_between_occurrences = get_separation_of_3_and_4_letter_blocks(ciphertext)

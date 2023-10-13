@@ -10,13 +10,12 @@ def crack(ciphertext: str, lang: Language, fast: bool) -> CaesarKey:
     The function can use either a congruence method or a method based on finding the best fit
     between letter frequency histograms, depending on the value of `fast`.
 
-    Args:
-        ciphertext (str): The encrypted message.
-        lang (Language): The language object to be used for decryption.
-        fast (bool): If True, use a faster congruence method.
+    :param str ciphertext: The encrypted message.
+    :param Language lang: The language object to be used for decryption.
+    :param bool fast: If True, use a faster congruence method.
 
-    Returns:
-        CaesarKey: The most likely key to have been used for the encryption.
+    :return: The most likely key to have been used for the encryption.
+    :rtype: CaesarKey
     """
     if fast:
         crack_congruence(ciphertext, lang)
@@ -36,12 +35,11 @@ def crack_congruence(ciphertext: str, lang: Language) -> CaesarKey:
     then determines the most likely shift value (key) using the positional difference between these
     letters.
 
-    Args:
-        ciphertext (str): The encrypted message.
-        lang (Language): The language object to be used for decryption.
+    :param str ciphertext: The encrypted message.
+    :param Language lang: The language object to be used for decryption.
 
-    Returns:
-        CaesarKey: The most likely key to have been used for the encryption.
+    :return: The most likely key to have been used for the encryption.
+    :rtype: CaesarKey
     """
     alphabet = alphabets.alphabet(lang, LetterCase.LOWER)
     cipher_histogram = classiccrypto.utils.frequency.normalized_histogram(ciphertext, lang)

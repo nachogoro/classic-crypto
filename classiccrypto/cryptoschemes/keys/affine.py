@@ -9,24 +9,19 @@ class AffineKey(Cipherkey):
     The AffineKey class stores and manages the parameters for Affine cipher operations, ensuring
     consistent functionality for converting the key to its string representation.
 
-    Attributes:
-        a (int): The 'a' parameter in the affine cipher key, used for encryption and decryption.
-        b (int): The 'b' parameter in the affine cipher key, used for encryption and decryption.
-        lang (Language): Language to be used when using this key
-
-    Methods:
-        to_string: Provide a string representation of the cipher key.
+    :ivar int a: The 'a' parameter in the affine cipher key, used for encryption and decryption.
+    :ivar int b: The 'b' parameter in the affine cipher key, used for encryption and decryption.
+    :ivar Language lang: Language to be used when using this key
     """
 
     def __init__(self, a: int, b: int, lang: Language):
         """
         Initialize a new AffineKey instance.
 
-        Args:
-            a (int): The 'a' parameter in the affine cipher key.
-            b (int): The 'b' parameter in the affine cipher key.
-            lang (Language): Instance managing language-specific operations.
-        """
+        :param int a: The 'a' parameter in the affine cipher key.
+        :param int b: The 'b' parameter in the affine cipher key.
+        :param Language lang: Instance managing language-specific operations.
+    """
         super().__init__(lang)
         self.a = a
         self.b = b
@@ -35,7 +30,7 @@ class AffineKey(Cipherkey):
         """
         Generate a string representation of the Affine cipher key.
 
-        Returns:
-            str: String representation of the key in the format "a: [a_value]; b: [b_value]".
-        """
+        :return: String representation of the key in the format "a: [a_value]; b: [b_value]".
+        :rtype: str
+    """
         return f"a: {self.a}; b: {self.b}"

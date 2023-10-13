@@ -9,13 +9,12 @@ def crack(ciphertext: str, lang: Language, fast:bool) -> AffineKey:
     """
     Attempt to crack a ciphertext encrypted with the Affine cipher using statistical analysis.
 
-    Args:
-        ciphertext (str): The encrypted message.
-        lang (Language): The language object to be used for decryption.
-        fast (bool): If True, use a faster but possibly less accurate cracking method.
+    :param str ciphertext: The encrypted message.
+    :param Language lang: The language object to be used for decryption.
+    :param bool fast: If True, use a faster but possibly less accurate cracking method.
 
-    Returns:
-        AffineKey: The most likely key to have been used for the encryption.
+    :return: The most likely key to have been used for the encryption.
+    :rtype: AffineKey
     """
     if fast:
         return crack_congruence(ciphertext, lang)
@@ -30,12 +29,11 @@ def crack_bruteforce(ciphertext: str, lang: Language) -> AffineKey:
     letter frequency histogram to the reference language histogram and selecting the key for which
     the decrypted text has the highest similarity to the reference language.
 
-    Args:
-        ciphertext (str): The encrypted message.
-        lang (Language): The language object to be used for decryption.
+    :param str ciphertext: The encrypted message.
+    :param Language lang: The language object to be used for decryption.
 
-    Returns:
-        AffineKey: The key that yields the most likely plaintext, based on letter frequency.
+    :return: The key that yields the most likely plaintext, based on letter frequency.
+    :rtype: AffineKey
     """
     clear_alphabet = alphabets.alphabet(lang, LetterCase.UPPER)
     n = len(clear_alphabet)
@@ -70,13 +68,11 @@ def crack_congruence(ciphertext: str, lang: Language) -> AffineKey | None:
     This function determines the most frequent letters in the `ciphertext` and in a reference
     language, then uses their positions to estimate the most likely key using congruence relations.
 
-    Args:
-        ciphertext (str): The encrypted message.
-        lang (Language): The language object to be used for decryption.
+    :param str ciphertext: The encrypted message.
+    :param Language lang: The language object to be used for decryption.
 
-    Returns:
-        AffineKey: The most likely key to have been used for the encryption, or None if a likely
-                   key couldn't be determined.
+    :return: The most likely key to have been used for the encryption, or None if a likely key couldn't be determined.
+    :rtype: AffineKey
     """
     language_histogram = classiccrypto.utils.frequency.language_histogram(lang)
     cipher_histogram = classiccrypto.utils.frequency.normalized_histogram(ciphertext, lang)

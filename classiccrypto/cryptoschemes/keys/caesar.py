@@ -9,20 +9,16 @@ class CaesarKey(Cipherkey):
     The CaesarKey class holds the key for Caesar cipher operations, and ensures
     appropriate functionality is implemented for key string representation.
 
-    Attributes:
-        key (int): The shift value used for encryption and decryption in the Caesar cipher.
-        lang (Language): Language to be used when using this key
-    Methods:
-        to_string: Provide a string representation of the cipher key.
+    :ivar int key: The shift value used for encryption and decryption in the Caesar cipher.
+    :ivar Language lang: Language to be used when using this key
     """
 
     def __init__(self, key: int, lang: Language):
         """
         Initialize a new CaesarKey instance.
 
-        Args:
-            key (int): The Caesar cipher shift value.
-            lang (Language): Instance managing language-specific operations.
+        :param int key: The Caesar cipher shift value.
+        :param Language lang: Instance managing language-specific operations.
         """
         super().__init__(lang)
         self.key = key
@@ -31,7 +27,7 @@ class CaesarKey(Cipherkey):
         """
         Generate a string representation of the Caesar cipher key.
 
-        Returns:
-            str: String representation of the key.
+        :return: String representation of the key.
+        :rtype: str
         """
         return str(self.key)

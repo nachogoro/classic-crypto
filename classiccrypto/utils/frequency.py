@@ -6,12 +6,11 @@ def normalized_histogram(s: str, lang: Language) -> list:
     """
     Computes a normalized histogram of letter frequencies in a string.
 
-    Args:
-        s (str): The input string from which to compute the histogram.
-        lang (Language): The language enum indicating the considered alphabet.
+    :param str s: The input string from which to compute the histogram.
+    :param Language lang: The language enum indicating the considered alphabet.
 
-    Returns:
-        list: A list of tuples, each containing a letter and its normalized frequency.
+    :return: A list of tuples, each containing a letter and its normalized frequency.
+    :rtype: list
     """
 
     # Define the alphabet for each language
@@ -39,11 +38,10 @@ def language_histogram(lang: Language) -> list:
     """
     Retrieves a pre-defined normalized histogram for a given language.
 
-    Args:
-        lang (Language): The language enum indicating which language's histogram to retrieve.
+    :param Language lang: The language enum indicating which language's histogram to retrieve.
 
-    Returns:
-        list: A list of tuples, each containing a letter and its frequency in the language.
+    :return: A list of tuples, each containing a letter and its frequency in the language.
+    :rtype: list
     """
 
     if not hasattr(language_histogram, "esp_histogram"):
@@ -74,11 +72,10 @@ def empty_histogram(lang: Language) -> list:
     """
     Generates an empty histogram for a given language.
 
-    Args:
-        lang (Language): The language enum indicating the considered alphabet.
+    :param Language lang: The language enum indicating the considered alphabet.
 
-    Returns:
-        list: A list of tuples, each containing a letter and a frequency of 0.
+    :return: A list of tuples, each containing a letter and a frequency of 0.
+    :rtype: list
     """
 
     return [(k, 0) for k in alphabets.alphabet(lang, LetterCase.LOWER)]
@@ -88,12 +85,11 @@ def similarity(histo1: list, histo2: list) -> float:
     """
     Calculates the similarity between two normalized histograms using squared differences.
 
-    Args:
-        histo1 (list): The first histogram as a list of tuples.
-        histo2 (list): The second histogram as a list of tuples.
+    :param list histo1: The first histogram as a list of tuples.
+    :param list histo2: The second histogram as a list of tuples.
 
-    Returns:
-        float: A measure of similarity between the histograms (1 - sum of squared differences).
+    :return: A measure of similarity between the histograms (1 - sum of squared differences).
+    :rtype: float
     """
 
     shortest = histo1 if len(histo1) < len(histo2) else histo2
@@ -124,12 +120,11 @@ def slide_histogram(histogram: list, step: int) -> list:
     """
     Shifts a histogram by a specified step to the right, wrapping around at the alphabet's end.
 
-    Args:
-        histogram (list): The input histogram as a list of tuples.
-        step (int): The number of positions to shift the histogram.
+    :param list histogram: The input histogram as a list of tuples.
+    :param int step: The number of positions to shift the histogram.
 
-    Returns:
-        list: The shifted histogram as a list of tuples.
+    :return: The shifted histogram as a list of tuples.
+    :rtype: list
     """
 
     return _shift_list(histogram, step)
@@ -139,12 +134,11 @@ def histogram_from_file(filepath: str, lang: Language) -> list:
     """
     Computes a normalized histogram from a text file's contents.
 
-    Args:
-        filepath (str): The path to the text file.
-        lang (Language): The language enum indicating the considered alphabet.
+    :param str filepath: The path to the text file.
+    :param Language lang: The language enum indicating the considered alphabet.
 
-    Returns:
-        list: A histogram as a list of tuples, or an empty histogram if file reading fails.
+    :return: A histogram as a list of tuples, or an empty histogram if file reading fails.
+    :rtype: list
     """
 
     try:
@@ -161,9 +155,10 @@ def find_step_for_best_match(target_histogram: list, sliding_histogram: list) ->
     """
     Returns how many times should sliding_histogram shift to the right (closed)
     so it is as similar as possible to target_histogram.
-    :param target_histogram: Histogram used as reference
-    :param sliding_histogram: Histogram which slides
+    :param list target_histogram: Histogram used as reference
+    :param list sliding_histogram: Histogram which slides
     :return: The number of closed right shifts sliding histogram which maximises their similarity.
+    :rtype: int
     It is a number in [0, len(target_histogram) - 1]
     """
     best_similarity = similarity(target_histogram, sliding_histogram)
@@ -184,11 +179,10 @@ def sort_histogram_by_key(histogram: list) -> list:
     """
     Sorts a histogram by its keys, taking care of specific language characters.
 
-    Args:
-        histogram (list): The input histogram as a list of tuples.
+    :param list histogram: The input histogram as a list of tuples.
 
-    Returns:
-        list: The histogram sorted by its keys.
+    :return: The histogram sorted by its keys.
+    :rtype: list
     """
     if not histogram:
         return []
