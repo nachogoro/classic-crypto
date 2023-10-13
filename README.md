@@ -72,6 +72,11 @@ After that, you may launch any of the `.py` scripts in the root directory from t
 python vigenere_cipher.py
 ```
 
+If you want to try the cracker, you can find encrypted Spanish messages in `crackable/`, e.g.:
+```commandline
+python cracker.py --cryptoscheme vigenere --no-gui --lang ESP --decrypt ./crackable/vigenere-encrypted.txt
+```
+
 ---
 
 ## Contributing
