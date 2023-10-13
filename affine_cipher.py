@@ -12,23 +12,6 @@ from classiccrypto.cryptoschemes.affine import AffineKey
 matplotlib.use('TkAgg')
 
 
-def create_table(parent, row1: list, row2: list):
-    for widget in parent.winfo_children():
-        widget.destroy()
-
-    for r in range(2):
-        for c in range(len(row1)):
-            text = row1[c] if r == 0 else row2[c]
-            label = tk.Label(parent, text=text, font=('Courier', 26), relief="solid", padx=5, pady=5)
-            label.grid(row=r, column=c, sticky="nsew")
-
-    # Set column and row weights so they behave nicely when resizing
-    for c in range(len(row1)):
-        parent.grid_columnconfigure(c, weight=1)
-    for r in range(2):
-        parent.grid_rowconfigure(r, weight=1)
-
-
 class AffineApp(tk.Tk):
     cipher_key: AffineKey
     default_label_font = ("Helvetica", 18)
@@ -40,11 +23,28 @@ class AffineApp(tk.Tk):
         else:
             self.decrypt_text()
 
-        create_table(self.table_frame,
-                     row1=alphabets.alphabet(self.cipher_key.lang,
-                                             LetterCase.UPPER),
-                     row2=alphabets.alphabet_affine(self.cipher_key,
-                                                    LetterCase.UPPER))
+        self.create_table(self.table_frame,
+                          row1=alphabets.alphabet(self.cipher_key.lang,
+                                                  LetterCase.UPPER),
+                          row2=alphabets.alphabet_affine(self.cipher_key,
+                                                         LetterCase.UPPER))
+
+    @staticmethod
+    def create_table(parent, row1: list, row2: list):
+        for widget in parent.winfo_children():
+            widget.destroy()
+
+        for r in range(2):
+            for c in range(len(row1)):
+                text = row1[c] if r == 0 else row2[c]
+                label = tk.Label(parent, text=text, font=('Courier', 26), relief="solid", padx=5, pady=5)
+                label.grid(row=r, column=c, sticky="nsew")
+
+        # Set column and row weights so they behave nicely when resizing
+        for c in range(len(row1)):
+            parent.grid_columnconfigure(c, weight=1)
+        for r in range(2):
+            parent.grid_rowconfigure(r, weight=1)
 
     @staticmethod
     def save_as_file(text: str, default_name: str = "Untitled.txt"):
