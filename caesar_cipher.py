@@ -50,7 +50,8 @@ class CaesarApp(tk.Tk):
         except:
             self.cipher_key = CaesarKey(0, self.cipher_key.lang)
 
-    def create_table(self, parent, row1: list, row2: list):
+    @staticmethod
+    def create_table(parent, row1: list, row2: list):
         for widget in parent.winfo_children():
             widget.destroy()
 
