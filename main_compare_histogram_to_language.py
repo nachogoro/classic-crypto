@@ -5,9 +5,9 @@ from tkinter import ttk
 
 import matplotlib
 
-import frequency_analysis
-import histogramfigures
-from frequency_analysis import Language
+from classiccrypto.utils import Language, gui
+from classiccrypto.utils.gui import histogram
+from classiccrypto.utils import frequency
 
 matplotlib.use('TkAgg')
 
@@ -16,36 +16,36 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class FileAndLanguageHistogramPlotter(tk.Tk):
     def language_histogram(self):
-        return frequency_analysis.frequency_per_language(self.selected_language)
+        return frequency.language_histogram(self.selected_language)
 
     def update_ui(self):
         self.similarity_value_label.config(text=f"{self.similarity_value:.4f}")
         self.slide_value_label.config(text=f"{self.slide_value}")
 
-        histogramfigures.update_histogram_figure(self.language_histogram_fig,
-                                                 self.language_histogram())
+        gui.histogram.update_histogram_figure(self.language_histogram_fig,
+                                              self.language_histogram())
 
         self.language_histogram_canvas.draw()
 
-        slided_text_histogram = frequency_analysis.slide_histogram(self.file_histogram, self.slide_value)
+        slided_text_histogram = frequency.slide_histogram(self.file_histogram, self.slide_value)
         if not self.file_entry_var.get():
             new_title = "<No file selected>"
         else:
             new_title = f"Frequency of letters in {os.path.basename(self.file_entry_var.get())}"
 
             if self.slide_value != 0:
-                new_title +=  f" (shifted by {self.slide_value})"
+                new_title += f" (shifted by {self.slide_value})"
 
-        histogramfigures.update_histogram_figure(self.file_histogram_fig,
-                                                 histogram=slided_text_histogram,
-                                                 title=new_title)
+        gui.histogram.update_histogram_figure(self.file_histogram_fig,
+                                              histogram=slided_text_histogram,
+                                              title=new_title)
 
         self.file_histogram_canvas.draw()
 
     def on_new_file_selected(self):
         # Update the file label or entry with the selected file path
-        self.file_histogram = frequency_analysis.histogram_from_file(self.file_entry_var.get(),
-                                                                     self.selected_language)
+        self.file_histogram = frequency.histogram_from_file(self.file_entry_var.get(),
+                                                            self.selected_language)
         self.similarity_value = self.compute_similarity()
 
         self.update_ui()
@@ -62,7 +62,7 @@ class FileAndLanguageHistogramPlotter(tk.Tk):
     def on_select_language(self, value):
         self.selected_language = Language.from_string(value)
 
-        self.file_histogram = frequency_analysis.histogram_from_file(
+        self.file_histogram = frequency.histogram_from_file(
             self.file_entry_var.get(),
             self.selected_language)
 
@@ -71,22 +71,22 @@ class FileAndLanguageHistogramPlotter(tk.Tk):
         self.update_ui()
 
     def match_histograms(self):
-        self.slide_value = frequency_analysis.find_step_for_best_match(self.language_histogram(),
-                                                                       self.file_histogram)
+        self.slide_value = frequency.find_step_for_best_match(self.language_histogram(),
+                                                              self.file_histogram)
         self.similarity_value = self.compute_similarity()
         self.update_ui()
 
     def compute_similarity(self):
-        return frequency_analysis.similarity(
+        return frequency.similarity(
             self.language_histogram(),
-            frequency_analysis.slide_histogram(self.file_histogram, self.slide_value)
+            frequency.slide_histogram(self.file_histogram, self.slide_value)
         )
 
     def __init__(self):
         super().__init__()
 
         self.selected_language = Language.ESP
-        self.file_histogram = frequency_analysis.empty_histogram(self.selected_language)
+        self.file_histogram = frequency.empty_histogram(self.selected_language)
         self.slide_value = 0
         self.similarity_value = self.compute_similarity()
 
@@ -152,7 +152,7 @@ class FileAndLanguageHistogramPlotter(tk.Tk):
 
         ########################
         # Place histogram
-        self.language_histogram_fig = histogramfigures.create_histogram_figure(
+        self.language_histogram_fig = gui.histogram.create_histogram_figure(
             self.language_histogram(),
             "Frequency of letters language-wide",
             "Frequency")
@@ -160,7 +160,7 @@ class FileAndLanguageHistogramPlotter(tk.Tk):
         self.language_histogram_canvas = FigureCanvasTkAgg(self.language_histogram_fig, self)
         self.language_histogram_canvas.get_tk_widget().grid(row=1, column=0, sticky='nswe', padx=5, pady=5)
 
-        self.file_histogram_fig = histogramfigures.create_histogram_figure(
+        self.file_histogram_fig = gui.histogram.create_histogram_figure(
             self.file_histogram,
             "<No file selected>",
             "Frequency")
