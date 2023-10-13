@@ -146,6 +146,7 @@ class VigenereApp(tk.Tk):
         clear_text_label.grid(row=0, column=0, columnspan=2)
         self.clear_text_widget = tk.Text(clear_text_frame, width=27, wrap=tk.WORD, font=self.default_message_font)
         self.clear_text_widget.grid(row=1, column=0, padx=(20, 0), sticky="nsew")
+        tkwidget_utils.add_context_menu(self.clear_text_widget)
 
         clear_scrollbar = tk.Scrollbar(clear_text_frame, command=self.clear_text_widget.yview)
         clear_scrollbar.grid(row=1, column=1, sticky="ns")
@@ -192,6 +193,7 @@ class VigenereApp(tk.Tk):
         cipher_text_label.grid(row=0, column=0, columnspan=2)
         self.cipher_text_widget = tk.Text(cipher_text_frame, wrap=tk.WORD, width=27, font=self.default_message_font)
         self.cipher_text_widget.grid(row=1, column=0, sticky="nsew")
+        tkwidget_utils.add_context_menu(self.cipher_text_widget)
 
         cipher_scrollbar = tk.Scrollbar(cipher_text_frame, command=self.cipher_text_widget.yview)
         cipher_scrollbar.grid(row=1, column=1, padx=(0, 20), sticky="ns")

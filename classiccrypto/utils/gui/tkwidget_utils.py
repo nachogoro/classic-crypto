@@ -2,6 +2,36 @@ import tkinter as tk
 from tkinter import END
 
 
+def _on_right_click(event, context_menu):
+    """
+    Displays context menu on right-click event.
+
+    :param event: tk.Event object, contains information about the event such as
+                  the mouse pointer's x and y coordinates.
+    :param context_menu: tk.Menu object, the context menu to be displayed
+                         when right-click event is triggered.
+    """
+    # Show context menu
+    context_menu.post(event.x_root, event.y_root)
+
+
+def add_context_menu(widget: tk.Text):
+    """
+    Adds a context menu to a Tkinter Text widget.
+
+    :param widget: tk.Text object to add context menu to.
+    """
+    context_menu = tk.Menu(widget, tearoff=0)
+    context_menu.add_command(label="Copy", command=lambda: widget.event_generate('<<Copy>>'))
+    context_menu.add_command(label="Paste", command=lambda: widget.event_generate('<<Paste>>'))
+    context_menu.add_command(label="Delete", command=lambda: widget.event_generate('<<Clear>>'))
+    context_menu.add_command(label="Select All", command=lambda: widget.tag_add(tk.SEL, "1.0", tk.END))
+
+    widget.bind("<Button-3>", lambda event: _on_right_click(event, context_menu))
+    widget.bind("<Button-1>", lambda event: context_menu.unpost())
+    widget.bind("<FocusOut>", lambda event: context_menu.unpost())
+
+
 def get_text_from_widget(widget: tk.Text) -> str:
     """
     Retrieve the textual content from a Tkinter Text widget.
