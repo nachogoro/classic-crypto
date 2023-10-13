@@ -15,8 +15,6 @@ Classic Crypto is a collection of scripts and utilities designed to work with cl
 - [Getting Started](#getting-started)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
-
 ---
 
 ## Scripts
@@ -27,9 +25,9 @@ A CLI utility designed to crack classic encrypted messages.
 
 #### Usage
 
-\```
+```
 usage: cracker.py [-h] --cryptoscheme {vigenere,caesar,affine} [--no-gui] [--fast] --lang {ESP,ENG} [--decrypt] filepath
-\```
+```
 
 - `--cryptoscheme {vigenere,caesar,affine}`: Specifies the cryptoscheme to crack.
 - `--no-gui`: If specified, all outputs will be in CLI, ensuring no GUI pop-ups.
