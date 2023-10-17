@@ -212,5 +212,5 @@ class VigenereApp(tk.Tk):
 
 if __name__ == "__main__":
     app = VigenereApp()
-    app.wm_attributes('-zoomed', 1)
+    tkwidget_utils.maximize_window(app)
     app.mainloop()

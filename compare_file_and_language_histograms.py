@@ -7,7 +7,7 @@ import matplotlib
 
 from classiccrypto.utils import Language, gui
 from classiccrypto.utils import frequency
-from classiccrypto.utils.gui import histogram
+from classiccrypto.utils.gui import histogram, tkwidget_utils
 
 matplotlib.use('TkAgg')
 
@@ -206,5 +206,5 @@ class FileAndLanguageHistogramPlotter(tk.Tk):
 
 if __name__ == "__main__":
     app = FileAndLanguageHistogramPlotter()
-    app.wm_attributes('-zoomed', 1)
+    tkwidget_utils.maximize_window(app)
     app.mainloop()

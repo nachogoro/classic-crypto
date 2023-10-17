@@ -1,3 +1,4 @@
+import sys
 import tkinter as tk
 from tkinter import END
 
@@ -57,3 +58,13 @@ def set_text_in_widget(widget: tk.Text, text: str):
     """
     widget.delete("1.0", END)
     widget.insert("1.0", text)
+
+
+def maximize_window(window: tk.Tk):
+    """
+    Maximizes the given window
+    """
+    if sys.platform == "linux":
+        window.wm_attributes('-zoomed', True)
+    else:
+        window.wm_attributes('zoomed')
