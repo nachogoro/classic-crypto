@@ -63,7 +63,7 @@ class VigenereApp(tk.Tk):
         self.last_action_encrypt = False
         self.update_cipher_key()
 
-        decryption_result = vigenere.encrypt(
+        decryption_result = vigenere.decrypt(
             tkwidget_utils.get_text_from_widget(self.cipher_text_widget),
             self.cipher_key)
 

@@ -67,4 +67,4 @@ def maximize_window(window: tk.Tk):
     if sys.platform == "linux":
         window.wm_attributes('-zoomed', True)
     else:
-        window.wm_attributes('zoomed')
+        window.state('zoomed')
